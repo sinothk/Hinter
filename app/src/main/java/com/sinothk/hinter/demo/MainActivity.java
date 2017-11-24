@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.sinothk.hinter.HintHelper;
+import com.sinothk.hinter.HinterManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,14 +17,14 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HintHelper.applyCount(MainActivity.this, 21);
+                HinterManager.applyCount(MainActivity.this, 21);
             }
         });
 
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HintHelper.removeCount(MainActivity.this); //for 1.1.4+
+                HinterManager.removeCount(MainActivity.this); //for 1.1.4+
             }
         });
     }

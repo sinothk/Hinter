@@ -1,1 +1,1 @@
-include ':app', ':Hinter'
+include ':app', ':HinterManager'

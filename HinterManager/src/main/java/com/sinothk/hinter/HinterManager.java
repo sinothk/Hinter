@@ -35,7 +35,7 @@ import me.leolin.shortcutbadger.impl.ZukHomeBadger;
  * 功能：
  */
 
-public class HintHelper {
+public class HinterManager {
 
     private static final String LOG_TAG = "ShortcutBadger";
     private static final int SUPPORTED_CHECK_ATTEMPTS = 3;
