@@ -28,12 +28,14 @@ public class HuaweiHomeBadger implements Badger {
         localBundle.putInt("badgenumber", badgeCount);
 
         //獲取系統版本
-//        int currentApiVersion = android.os.Build.VERSION.SDK_INT; > 23
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
+        int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentApiVersion < 24) {
             Uri uri = Uri.parse("content://com.huawei.android.launcher.settings/badge/");
             context.getContentResolver().call(uri, "change_badge", null, localBundle);
         } else {
             // 暂无
+            Uri uri = Uri.parse("content://com.huawei.android.launcher.settings/badge/").normalizeScheme();
+            context.getContentResolver().call(uri, "change_badge", null, localBundle);
         }
     }
 
