@@ -1,4 +1,4 @@
-package com.sinothk.hinter;
+package me.leolin.shortcutbadger;
 
 import android.app.Notification;
 import android.content.ComponentName;
@@ -14,8 +14,6 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import me.leolin.shortcutbadger.Badger;
-import me.leolin.shortcutbadger.ShortcutBadgeException;
 import me.leolin.shortcutbadger.impl.AdwHomeBadger;
 import me.leolin.shortcutbadger.impl.ApexHomeBadger;
 import me.leolin.shortcutbadger.impl.AsusHomeBadger;
@@ -28,14 +26,14 @@ import me.leolin.shortcutbadger.impl.OPPOHomeBader;
 import me.leolin.shortcutbadger.impl.SamsungHomeBadger;
 import me.leolin.shortcutbadger.impl.SonyHomeBadger;
 import me.leolin.shortcutbadger.impl.VivoHomeBadger;
+import me.leolin.shortcutbadger.impl.ZTEHomeBadger;
 import me.leolin.shortcutbadger.impl.ZukHomeBadger;
 
-/**
- * Created by 梁玉涛 on 2017/11/23.
- * 功能：未读提醒：https://github.com/leolin310148/ShortcutBadger
- */
 
-public class HinterManager {
+/**
+ * @author Leo Lin
+ */
+public final class ShortcutBadger {
 
     private static final String LOG_TAG = "ShortcutBadger";
     private static final int SUPPORTED_CHECK_ATTEMPTS = 3;
@@ -48,6 +46,7 @@ public class HinterManager {
     static {
         BADGERS.add(AdwHomeBadger.class);
         BADGERS.add(ApexHomeBadger.class);
+        BADGERS.add(DefaultBadger.class);
         BADGERS.add(NewHtcHomeBadger.class);
         BADGERS.add(NovaHomeBadger.class);
         BADGERS.add(SonyHomeBadger.class);
@@ -57,6 +56,7 @@ public class HinterManager {
         BADGERS.add(SamsungHomeBadger.class);
         BADGERS.add(ZukHomeBadger.class);
         BADGERS.add(VivoHomeBadger.class);
+        BADGERS.add(ZTEHomeBadger.class);
         BADGERS.add(EverythingMeHomeBadger.class);
     }
 
@@ -199,21 +199,23 @@ public class HinterManager {
 
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
-        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
 
-        if (resolveInfo == null || resolveInfo.activityInfo.name.toLowerCase().contains("resolver"))
-            return false;
+        for (ResolveInfo resolveInfo : resolveInfos) {
+            String currentHomePackage = resolveInfo.activityInfo.packageName;
 
-        String currentHomePackage = resolveInfo.activityInfo.packageName;
-
-        for (Class<? extends Badger> badger : BADGERS) {
-            Badger shortcutBadger = null;
-            try {
-                shortcutBadger = badger.newInstance();
-            } catch (Exception ignored) {
+            for (Class<? extends Badger> badger : BADGERS) {
+                Badger shortcutBadger = null;
+                try {
+                    shortcutBadger = badger.newInstance();
+                } catch (Exception ignored) {
+                }
+                if (shortcutBadger != null && shortcutBadger.getSupportLaunchers().contains(currentHomePackage)) {
+                    sShortcutBadger = shortcutBadger;
+                    break;
+                }
             }
-            if (shortcutBadger != null && shortcutBadger.getSupportLaunchers().contains(currentHomePackage)) {
-                sShortcutBadger = shortcutBadger;
+            if (sShortcutBadger != null) {
                 break;
             }
         }
@@ -225,10 +227,17 @@ public class HinterManager {
                 sShortcutBadger = new OPPOHomeBader();
             else if (Build.MANUFACTURER.equalsIgnoreCase("VIVO"))
                 sShortcutBadger = new VivoHomeBadger();
+            else if (Build.MANUFACTURER.equalsIgnoreCase("ZTE"))
+                sShortcutBadger = new ZTEHomeBadger();
             else
                 sShortcutBadger = new DefaultBadger();
         }
 
         return true;
+    }
+
+    // Avoid anybody to instantiate this class
+    private ShortcutBadger() {
+
     }
 }
