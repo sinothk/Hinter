@@ -16,6 +16,36 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    // 签名
+    signingConfigs {
+        release {
+            storeFile file('zkhy_release.jks')
+            storePassword 'Abc123456789'
+            keyAlias 'Abc1_9'
+            keyPassword 'Abc123456789'
+        }
+        debug {
+            storeFile file('zkhy_debug.jks')
+            storePassword 'Abc123456789'
+            keyAlias 'Abc1_9'
+            keyPassword 'Abc123456789'
+        }
+        buildTypes {
+            debug {
+                signingConfig signingConfigs.debug
+            }
+            release {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "WM_v${defaultConfig.versionName}_${defaultConfig.versionCode}_${buildType.name}_${new Date().format("MMddHH")}.apk"
+        }
+    }
 }
 
 dependencies {
@@ -26,4 +56,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation project(':HinterManager')
+//
+//    implementation "me.leolin:ShortcutBadger:1.1.22@aar"
 }

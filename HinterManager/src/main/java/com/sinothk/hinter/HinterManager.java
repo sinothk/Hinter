@@ -40,7 +40,7 @@ public class HinterManager {
     private static final String LOG_TAG = "ShortcutBadger";
     private static final int SUPPORTED_CHECK_ATTEMPTS = 3;
 
-    private static final List<Class<? extends Badger>> BADGERS = new LinkedList<Class<? extends Badger>>();
+    private static final List<Class<? extends Badger>> BADGERS = new LinkedList<>();
 
     private volatile static Boolean sIsBadgeCounterSupported;
     private final static Object sCounterSupportedLock = new Object();
