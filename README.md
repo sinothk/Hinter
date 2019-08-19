@@ -1,6 +1,6 @@
 # hinter
 
-findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HinterManager.applyCount(MainActivity.this, 21);
