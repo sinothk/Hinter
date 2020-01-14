@@ -17,7 +17,7 @@ Add it in your root build.gradle at the end of repositories:
 ## Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.sinothk:Hinter:1.3.0819'
+	        implementation 'com.github.sinothk:Hinter:2.x.0115'
 	}
     
  # 使用
